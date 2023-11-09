@@ -45,7 +45,7 @@ live() {
         echo "$2" >$HOME/live/.R
         echo "Remote URL updated!"
         return 0
-    elif [[ "$1" == '?' || "$1" == '-h' || "$1" == '--help' ]]; then
+    elif [[ -z "$1" || "$1" == '?' || "$1" == '-h' || "$1" == '--help' ]]; then
         echo "Usage example："
         echo "  Case#1：update default url"
         echo "      live url 'rtmp://xxx'"
