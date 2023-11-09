@@ -45,7 +45,7 @@ _pos_time() {
 _play() {
     # 检查存档文件
     local file="$1"
-    [[ ! -e $HOME/live/.local/$file ]] && touch $HOME/live/.local/$file
+    [[ -e $HOME/live/.local/$file ]] && touch $HOME/live/.local/$file
     # 采集媒体库目录文件列表
     local paths=()
     readarray -d ':' -t paths <<<$2
