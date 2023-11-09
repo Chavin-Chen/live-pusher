@@ -28,7 +28,7 @@ k() {
 sdcard() {
     local dev="${1:-sda1}"
     sudo mkdir -p /mnt/$dev 2>/dev/null
-    if [[ "$2" == '-' ]]; then
+    if [[ "$2" != '-' ]]; then
         sudo mount /dev/$dev /mnt/$dev
     else
         sudo umount /mnt/$dev
