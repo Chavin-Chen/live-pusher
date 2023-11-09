@@ -76,7 +76,7 @@ _play() {
     fi
     # 检查推流地址
     local url
-    if [[ -z "$__URL__" || "$__URL__"=='-'* ]]; then # 取默认地址
+    if [[ -z "$__URL__" || "$__URL__" == '-'* ]]; then # 取默认地址
         {
             read url
             url=${url:-''}

@@ -26,7 +26,7 @@ k() {
 sdcard() {
     local dev="${1:-sda1}"
     sudo mkdir -p /mnt/$dev 2>/dev/null
-    if [[ "$2"=='-' ]]; then
+    if [[ "$2" == '-' ]]; then
         sudo mount /dev/$dev /mnt/$dev
     else
         sudo umount /mnt/$dev
@@ -39,21 +39,21 @@ sdcard() {
 # (3)向指定URL推流：live 'rtmp://xxx' drama 3
 live() {
     mkdir -p $HOME/live
-    [[ ! -e $HOME/live/.R ]] && touch $HOME/live/.R
+    [[ -e $HOME/live/.R ]] && touch $HOME/live/.R
     # 更新推流地址
     if [[ "$1" == 'url' ]]; then
         echo "$2" >$HOME/live/.R
         echo "Remote URL updated!"
         return 0
-    elif [["$1" == '?' || "$1" == '-h' || "$1" == '--help']]; then
-        echo "Usage example：";
-        echo "  Case#1：update default url";
-        echo "      live url 'rtmp://xxx'";
-        echo "  Case#2：push 3 videos of the media library named 'drama' to the default url";
-        echo "      live - drama 3";
-        echo "  Case#3：push all the videos of the media library named 'drama' to the input url on a loop";
-        echo "      live 'rtmp://xxx' drama -";
-        return 0;
+    elif [[ "$1" == '?' || "$1" == '-h' || "$1" == '--help' ]]; then
+        echo "Usage example："
+        echo "  Case#1：update default url"
+        echo "      live url 'rtmp://xxx'"
+        echo "  Case#2：push 3 videos of the media library named 'drama' to the default url"
+        echo "      live - drama 3"
+        echo "  Case#3：push all the videos of the media library named 'drama' to the input url on a loop"
+        echo "      live 'rtmp://xxx' drama -"
+        return 0
     fi
     # 切换到工作目录后，执行任务
     cd $HOME/live
