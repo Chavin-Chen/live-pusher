@@ -48,7 +48,7 @@ live() {
         cat $__LIVE_DIR__/.R
         return 0
     elif [[ "$1" == 'home' || "$1" == '@' ]]; then
-        __LIVE_DIR__="$HOME/live/$2"
+        __LIVE_DIR__="$HOME/live/${2:-0}"
         echo "Current:$__LIVE_DIR__"
         return 0
     elif [[ -z "$1" || "$1" == '?' || "$1" == '-h' || "$1" == '--help' ]]; then
