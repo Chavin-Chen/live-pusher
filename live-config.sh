@@ -10,7 +10,7 @@ alias ts='now ts'
 
 # 后台运行 behind <cmd>
 behind() {
-    nohup bash -c "$*" &
+    nohup bash -c "$1 '$2' $3 $4" &
 }
 
 # 显示当前用户进程树
@@ -57,7 +57,7 @@ live() {
     fi
     # 切换到工作目录后，执行任务
     cd $HOME/live
-    behind /live/live-local.sh "$@"
+    behind /live/live-local.sh "$*"
 }
 
 # 当前目录的文件批量改名

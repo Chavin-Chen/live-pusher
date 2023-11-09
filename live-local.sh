@@ -92,7 +92,7 @@ _play() {
     for ((i = pos; i < len && (cnt < n || n < 0); )); do
         echo "start pushing $pos: ${arr[i]} offset=$offset"
         ffmpeg -re -ss $offset -i ${arr[i]} $encode -f flv -flvflags no_duration_filesize -hide_banner \
-            $URL >$HOME/live/.local/ffmpeg.out 2>&1
+            $url >$HOME/live/.local/ffmpeg.out 2>&1
         offset=0 # 清空首集偏移
         if (($(grep -i -c "Error" $HOME/live/.local/ffmpeg.out) != 0)); then
             echo "$file breaked at: $pos"
@@ -107,4 +107,4 @@ _play() {
     done
 }
 
-main "$@"
+main $@
