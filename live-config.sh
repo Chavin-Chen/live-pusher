@@ -36,9 +36,6 @@ sdcard() {
 }
 
 # 快捷方式
-# (1)更新默认URL：live url 'rtmp://xxx'
-# (2)向默认URL推流：live - drama 3
-# (3)向指定URL推流：live 'rtmp://xxx' drama -1
 live() {
     mkdir -p $__LIVE_DIR__
     [[ ! -e $__LIVE_DIR__/.R ]] && touch $__LIVE_DIR__/.R
@@ -51,13 +48,13 @@ live() {
         cat $__LIVE_DIR__/.R
         return 0
     elif [[ "$1" == 'home' || "$1" == '@' ]]; then
-        __LIVE_DIR__=${2:-"$__LIVE_DIR__"}
+        __LIVE_DIR__="$HOME/live/$2"
         echo "Current:$__LIVE_DIR__"
         return 0
     elif [[ -z "$1" || "$1" == '?' || "$1" == '-h' || "$1" == '--help' ]]; then
         echo "Usage example：(Current=$__LIVE_DIR__)"
-        echo "  Case#0：update the home dir of live"
-        echo "      live home '$HOME/live/0'"
+        echo "  Case#0：update the home dir of live(path prefix:$HOME/live/)"
+        echo "      live home 1"
         echo "  Case#1：update default url"
         echo "      live url 'rtmp://xxx'"
         echo "  Case#2：push 3 videos of the media library named 'drama' to the default url"
