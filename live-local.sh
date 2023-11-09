@@ -37,6 +37,7 @@ _pos_time() {
     hour=$((hour * 3600))
     min=$((min * 60))
     local offset=$((hour + min + sec - 10))
+    ((offset < 0)) && ((offset = 0))
     echo -e "$2\n$offset" >$posFile
 }
 
