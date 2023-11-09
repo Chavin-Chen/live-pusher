@@ -1,5 +1,5 @@
 # 直播主目录
-__LIVE_DIR__=${__LIVE_DIR__:-"$HOME/live"}
+__LIVE_DIR__=${__LIVE_DIR__:-"$HOME/live/0"}
 # 获取当前时间串
 now() {
     if [[ "$*" == 'ts' ]]; then
@@ -54,7 +54,7 @@ live() {
     elif [[ -z "$1" || "$1" == '?' || "$1" == '-h' || "$1" == '--help' ]]; then
         echo "Usage example：(Current=$__LIVE_DIR__)"
         echo "  Case#0：update the home dir of live"
-        echo "      live home '$HOME/live'"
+        echo "      live home '$HOME/live/0'"
         echo "  Case#1：update default url"
         echo "      live url 'rtmp://xxx'"
         echo "  Case#2：push 3 videos of the media library named 'drama' to the default url"

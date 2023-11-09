@@ -22,7 +22,7 @@ main() {
 # 加载工具库
 source /live/live-config.sh
 # 直播主目录
-__LIVE_DIR__=${__LIVE_DIR__:-"$HOME/live"}
+__LIVE_DIR__=${__LIVE_DIR__:-"$HOME/live/0"}
 # 创建日志目录
 mkdir -p $__LIVE_DIR__/.local
 # 推流地址
