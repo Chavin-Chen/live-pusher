@@ -43,9 +43,12 @@ live() {
     mkdir -p $__LIVE_DIR__
     [[ ! -e $__LIVE_DIR__/.R ]] && touch $__LIVE_DIR__/.R
     # 更新推流地址
-    if [[ "$1" == 'url' || "$1" == 'R' ]]; then
-        echo "$2" >$__LIVE_DIR__/.R
-        echo "Remote URL updated!"
+    if [[ "$1" == 'url' || "$1" == '-' || "$1" == 'R' ]]; then
+        if [[ -n "$2" ]]; then
+            echo "$2" >$__LIVE_DIR__/.R
+            echo "Remote URL updated!"
+        fi
+        cat $__LIVE_DIR__/.R
         return 0
     elif [[ "$1" == 'home' || "$1" == '@' ]]; then
         __LIVE_DIR__=${2:-"$__LIVE_DIR__"}
