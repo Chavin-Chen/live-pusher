@@ -35,8 +35,8 @@ sdcard() {
 
 # 快捷方式
 # (1)更新默认URL：live url 'rtmp://xxx'
-# (2)向默认URL推流：live - drama -1
-# (3)向指定URL推流：live 'rtmp://xxx' drama 3
+# (2)向默认URL推流：live - drama 3
+# (3)向指定URL推流：live 'rtmp://xxx' drama -1
 live() {
     mkdir -p $HOME/live
     [[ -e $HOME/live/.R ]] && touch $HOME/live/.R
@@ -52,7 +52,7 @@ live() {
         echo "  Case#2：push 3 videos of the media library named 'drama' to the default url"
         echo "      live - drama 3"
         echo "  Case#3：push all the videos of the media library named 'drama' to the input url on a loop"
-        echo "      live 'rtmp://xxx' drama -"
+        echo "      live 'rtmp://xxx' drama -1"
         return 0
     fi
     # 切换到工作目录后，执行任务
