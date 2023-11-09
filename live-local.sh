@@ -21,15 +21,17 @@ main() {
 # =============================================================================================
 # 加载工具库
 source /live/live-config.sh
+# 直播主目录
+__LIVE_DIR__=${__LIVE_DIR__:-"$HOME/live"}
 # 创建日志目录
-mkdir -p $HOME/live/.local
+mkdir -p $__LIVE_DIR__/.local
 # 推流地址
 __URL__=''
 
 # 存档当前进度（自动读取当前推流时间点）: _pos_time $FUNCNAME $pos
 _pos_time() {
-    local posFile="$HOME/live/.local/$1"
-    local line=$(cat $HOME/live/.local/ffmpeg.out | grep '^frame=.*time=.*speed=' | tail -n 1)
+    local posFile="$__LIVE_DIR__/.local/$1"
+    local line=$(cat $__LIVE_DIR__/.local/ffmpeg.out | grep '^frame=.*time=.*speed=' | tail -n 1)
     local time=$(echo $line | awk -F 'time=' '{print $2}' | awk -F 'bitrate=' '{print $1}')
     local hour="$(echo $time | awk -F ':' '{print $1}' | sed -r 's/0*([0-9])/\1/')"
     local min="$(echo $time | awk -F ':' '{print $2}' | sed -r 's/0*([0-9])/\1/')"
@@ -45,7 +47,7 @@ _pos_time() {
 _play() {
     # 检查存档文件
     local file="$1"
-    [[ ! -e $HOME/live/.local/$file ]] && touch $HOME/live/.local/$file
+    [[ ! -e $__LIVE_DIR__/.local/$file ]] && touch $__LIVE_DIR__/.local/$file
     # 采集媒体库目录文件列表
     local paths=()
     readarray -d ':' -t paths <<<$2
@@ -65,7 +67,7 @@ _play() {
         pos=${pos:-0}
         read offset
         offset=${offset:-0}
-    } <$HOME/live/.local/$file
+    } <$__LIVE_DIR__/.local/$file
     # 解析累计推流集数（默认播完就停播）
     local n=${3:-"$len"}
     local cnt=0
@@ -81,7 +83,7 @@ _play() {
         {
             read url
             url=${url:-''}
-        } <$HOME/live/.R
+        } <$__LIVE_DIR__/.R
     else
         url="$__URL__"
     fi
@@ -93,9 +95,9 @@ _play() {
     for ((i = pos; i < len && (cnt < n || n < 0); )); do
         echo "start pushing $pos: ${arr[i]} offset=$offset"
         ffmpeg -re -ss $offset -i ${arr[i]} $encode -f flv -flvflags no_duration_filesize -hide_banner \
-            $url >$HOME/live/.local/ffmpeg.out 2>&1
+            $url >$__LIVE_DIR__/.local/ffmpeg.out 2>&1
         offset=0 # 清空首集偏移
-        if (($(grep -i -c "Error" $HOME/live/.local/ffmpeg.out) != 0)); then
+        if (($(grep -i -c "Error" $__LIVE_DIR__/.local/ffmpeg.out) != 0)); then
             echo "$file breaked at: $pos"
             _pos_time $file $((i))
             break
@@ -104,7 +106,7 @@ _play() {
         ((i = (i + 1) % len))
         ((cnt = cnt + 1))
         pos=$((i))
-        echo "$pos" >$HOME/live/.local/$file
+        echo "$pos" >$__LIVE_DIR__/.local/$file
     done
 }
 
