@@ -39,7 +39,7 @@ sdcard() {
 # (3)向指定URL推流：live 'rtmp://xxx' drama -1
 live() {
     mkdir -p $HOME/live
-    [[ -e $HOME/live/.R ]] && touch $HOME/live/.R
+    [[ ! -e $HOME/live/.R ]] && touch $HOME/live/.R
     # 更新推流地址
     if [[ "$1" == 'url' ]]; then
         echo "$2" >$HOME/live/.R
