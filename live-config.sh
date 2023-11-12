@@ -81,9 +81,11 @@ live() {
                 dir="$HOME/live/$2"
                 [[ ! -e $__LIVE_DIR__ ]] && mkdir -p $__LIVE_DIR__
                 [[ ! -e $__LIVE_DIR__/.R ]] && touch $__LIVE_DIR__/.R
-                {
-                    read url
-                } <$dir/.R
+                if [[ -z "$url" ]]; then
+                    {
+                        read url
+                    } <$dir/.R
+                fi
                 shift 2
                 ;;
             -u | --url)
