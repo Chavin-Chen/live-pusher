@@ -134,5 +134,5 @@ END
     fi
     # 切换到工作目录后，执行任务
     cd $dir
-    behind /live/live-local.sh -d $dir -u "\"'$url'\"" -m $media -n $num
+    behind /live/live-local.sh -d $dir -u "'$url'" -m $media -n $num
 }
