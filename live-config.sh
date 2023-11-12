@@ -79,8 +79,8 @@ live() {
             case "$1" in
             -d | --dir)
                 dir="$HOME/live/$2"
-                [[ ! -e $__LIVE_DIR__ ]] && mkdir -p $__LIVE_DIR__
-                [[ ! -e $__LIVE_DIR__/.R ]] && touch $__LIVE_DIR__/.R
+                [[ ! -e $dir ]] && mkdir -p $dir
+                [[ ! -e $dir/.R ]] && touch $dir/.R
                 if [[ -z "$url" ]]; then
                     {
                         read url
