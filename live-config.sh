@@ -12,7 +12,7 @@ alias ts='now ts'
 
 # 后台运行 behind <cmd>
 behind() {
-    nohup bash -c "__LIVE_DIR__='$__LIVE_DIR__'; $1 '$2' $3 $4" &
+    nohup bash -c "$*" &
 }
 
 # 显示当前用户进程树
@@ -35,39 +35,6 @@ sdcard() {
     fi
 }
 
-# 快捷方式
-live() {
-    mkdir -p $__LIVE_DIR__
-    [[ ! -e $__LIVE_DIR__/.R ]] && touch $__LIVE_DIR__/.R
-    # 更新推流地址
-    if [[ "$1" == 'url' || "$1" == '-' || "$1" == 'R' ]]; then
-        if [[ -n "$2" ]]; then
-            echo "$2" >$__LIVE_DIR__/.R
-            echo "Remote URL updated!"
-        fi
-        cat $__LIVE_DIR__/.R
-        return 0
-    elif [[ "$1" == 'home' || "$1" == '@' ]]; then
-        __LIVE_DIR__="$HOME/live/${2:-0}"
-        echo "Current:$__LIVE_DIR__"
-        return 0
-    elif [[ -z "$1" || "$1" == '?' || "$1" == '-h' || "$1" == '--help' ]]; then
-        echo "Usage example：(Current=$__LIVE_DIR__)"
-        echo "  Case#0：update the home dir of live(path prefix:$HOME/live/)"
-        echo "      live home 1"
-        echo "  Case#1：update default url"
-        echo "      live url 'rtmp://xxx'"
-        echo "  Case#2：push 3 videos of the media library named 'drama' to the default url"
-        echo "      live - drama 3"
-        echo "  Case#3：push all the videos of the media library named 'drama' to the input url on a loop"
-        echo "      live 'rtmp://xxx' drama -1"
-        return 0
-    fi
-    # 切换到工作目录后，执行任务
-    cd $__LIVE_DIR__
-    behind /live/live-local.sh "$*"
-}
-
 # 当前目录的文件批量改名
 rename() {
     local path="./"
@@ -88,3 +55,82 @@ rename() {
     done
 }
 alias rn=rename
+
+# 快捷方式
+live() {
+    mkdir -p $__LIVE_DIR__
+    [[ ! -e $__LIVE_DIR__/.R ]] && touch $__LIVE_DIR__/.R
+
+    local dir="$__LIVE_DIR__"
+    local url
+    {
+        read url
+    } <$dir/.R
+    local media=''
+    local num='-1'
+    local doc=0
+    # parse options
+    local args=$(getopt -o d:,u:,m:,n:,h -l dir:,url:,media:,num:,help -a -- $*)
+    eval set -- $args
+    if [[ "$args" == ' --' ]]; then
+        doc=1
+    else
+        while true; do
+            case "$1" in
+            -d | --dir)
+                dir="$HOME/live/$2"
+                {
+                    read url
+                } <$dir/.R
+                shift 2
+                ;;
+            -u | --url)
+                url="$2"
+                shift 2
+                ;;
+            -m | --media)
+                media="$2"
+                shift 2
+                ;;
+            -n | --num)
+                num="$2"
+                shift 2
+                ;;
+            -h | --help)
+                doc=1
+                shift
+                ;;
+            --)
+                media="$2"
+                shift
+                break
+                ;;
+            *)
+                doc=1
+                shift
+                ;;
+            esac
+        done
+    fi
+    [[ -n "$dir" ]] && __LIVE_DIR__="$dir"
+    [[ -n "$url" ]] && echo "$url" >$dir/.R
+    [[ -z "$media" ]] && doc=1
+    if ((doc == 1)); then
+        cat <<-END
+Usage:(current dir=$__LIVE_DIR__)
+ live --media=drama --url=rtmp://xxxx
+start to push media library named drama to target url
+
+Options:
+ -d, --dir <dir-number>             set the home which logged in, is a number value, prefixed '$HOME/live/'
+ -u, --url <rtmp-url>               set the target url to push 
+ -m, --media <media-lib>            set the media library configured in live-local.sh
+ -n, --num <num-of-videos-to-push>  set the number of videos preparing to push
+ -h, --help                         show help
+END
+        return 0
+    fi
+    # 切换到工作目录后，执行任务
+    cd $dir
+    behind /live/live-local.sh -d $dir -u "'$url'" -m $media -n $num
+}

@@ -3,15 +3,14 @@
 # =============================================================================================
 # Usage: main 'rtmp://xxxx' drama -1
 main() {
-    __URL__="$1" # 推流地址
-    case $2 in   # 媒体库
+    case $1 in   # 媒体库
     # ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ 媒体库1 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
     'dra'*)
-        _play 'drama' "/mnt/sda1/drama/:/mnt/sda2/drama/" "$3" "AAC"
+        _play 'drama' "/mnt/sda1/drama/:/mnt/sda2/drama/" "$2" "AAC"
         ;;
     # ------------------------------ END -------------------------------
     *)
-        echo "Error:no media configuration for $2"
+        echo "Error:no media configuration for $1"
         ;;
     esac
 }
@@ -19,15 +18,6 @@ main() {
 # =============================================================================================
 # **************************************** Private ********************************************
 # =============================================================================================
-# 加载工具库
-source /live/live-config.sh
-# 直播主目录
-__LIVE_DIR__=${__LIVE_DIR__:-"$HOME/live/0"}
-# 创建日志目录
-mkdir -p $__LIVE_DIR__/.local
-# 推流地址
-__URL__=''
-
 # 存档当前进度（自动读取当前推流时间点）: _pos_time $FUNCNAME $pos
 _pos_time() {
     local posFile="$__LIVE_DIR__/.local/$1"
@@ -110,4 +100,35 @@ _play() {
     done
 }
 
-main $@
+# 加载工具库
+source /live/live-config.sh
+# 直播主目录
+__LIVE_DIR__=${__LIVE_DIR__:-"$HOME/live/0"}
+# 推流地址
+__URL__=${__URL__:-''}
+media=''
+num=0
+while getopts 'd:u:m:n:' args; do
+    case ${args} in
+      d)
+        __LIVE_DIR__="$OPTARG"
+        ;;
+      u)
+        __URL__="$OPTARG"
+        ;;
+      m)
+        media="$OPTARG"
+        ;;
+      n)
+        num=$OPTARG
+        ;;
+      *)
+        echo "ERROR INPUT!!!"
+        return 1;
+        ;;
+    esac
+done
+# 日志目录
+mkdir -p $__LIVE_DIR__/.local
+# 开始推流
+main $media $num
