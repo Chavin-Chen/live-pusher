@@ -1,9 +1,9 @@
 # =============================================================================================
 # ************************************** 用户配置媒体库 *****************************************
 # =============================================================================================
-# Usage: main 'rtmp://xxxx' drama -1
+# Usage: main drama -1
 main() {
-    case $1 in   # 媒体库
+    case $1 in # 媒体库
     # ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ 媒体库1 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
     'dra'*)
         _play 'drama' "/mnt/sda1/drama/:/mnt/sda2/drama/" "$2" "AAC"
@@ -60,6 +60,7 @@ _play() {
     } <$__LIVE_DIR__/.local/$file
     # 解析累计推流集数（默认播完就停播）
     local n=${3:-"$len"}
+    ((n == -1)) && n="$len"
     local cnt=0
     echo "plan to push $file($2) $n files"
     # 解析音频编码参数
@@ -82,7 +83,7 @@ _play() {
         return -1
     fi
     # 循环推流，直到分集数
-    for ((i = pos; i < len && (cnt < n || n < 0); )); do
+    for ((i = pos; i < len && (cnt < n || n <= 0); )); do
         echo "start pushing $pos: ${arr[i]} offset=$offset"
         ffmpeg -re -ss $offset -i ${arr[i]} $encode -f flv -flvflags no_duration_filesize -hide_banner \
             $url >$__LIVE_DIR__/.local/ffmpeg.out 2>&1
@@ -110,21 +111,21 @@ media=''
 num=0
 while getopts 'd:u:m:n:' args; do
     case ${args} in
-      d)
+    d)
         __LIVE_DIR__="$OPTARG"
         ;;
-      u)
+    u)
         __URL__="$OPTARG"
         ;;
-      m)
+    m)
         media="$OPTARG"
         ;;
-      n)
+    n)
         num=$OPTARG
         ;;
-      *)
+    *)
         echo "ERROR INPUT!!!"
-        return 1;
+        return 1
         ;;
     esac
 done
