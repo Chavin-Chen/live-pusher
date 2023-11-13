@@ -131,7 +131,7 @@ Usage:
     start to push media library named drama to target url
 
 Options:
- -d, --dir <dir-number>             set the home which logged in, auto prefixed '$HOME/live/'
+ -d, --dir <dir-number>             set the log dir, auto prefixed '$HOME/live/'
  -u, --url <rtmp-url>               set the target url to push 
  -m, --media <media-lib>            set the media library configured in live-local.sh
  -n, --num <num-of-videos-to-push>  set the number of videos preparing to push
