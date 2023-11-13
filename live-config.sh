@@ -120,13 +120,18 @@ live() {
     [[ -n "$url" ]] && echo "$url" >$dir/.R
     [[ -z "$media" ]] && doc=1
     if ((doc == 1)); then
+    cd $dir
         cat <<-END
-Usage:(current dir=$__LIVE_DIR__)
+Current:
+ dir=$dir
+ url=$url
+
+Usage:
  live --media=drama --url=rtmp://xxxx
-start to push media library named drama to target url
+    start to push media library named drama to target url
 
 Options:
- -d, --dir <dir-number>             set the home which logged in, is a number value, prefixed '$HOME/live/'
+ -d, --dir <dir-number>             set the home which logged in, auto prefixed '$HOME/live/'
  -u, --url <rtmp-url>               set the target url to push 
  -m, --media <media-lib>            set the media library configured in live-local.sh
  -n, --num <num-of-videos-to-push>  set the number of videos preparing to push
