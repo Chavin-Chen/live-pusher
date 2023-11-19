@@ -105,7 +105,7 @@ live() {
                 shift
                 ;;
             --)
-                media="$2"
+                [ -z "$media" ] && [ -n "$2" ] && media="$2"
                 shift
                 break
                 ;;
