@@ -122,7 +122,7 @@ live() {
     if ((doc == 1)); then
     cd $dir
         cat <<-END
-Current:
+Current version: 1.0
  dir=$dir
  url=$url
 

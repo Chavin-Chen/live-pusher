@@ -87,12 +87,13 @@ _play() {
         echo "start pushing $pos: ${arr[i]} offset=$offset"
         ffmpeg -re -ss $offset -i ${arr[i]} $encode -f flv -flvflags no_duration_filesize -hide_banner \
             $url >$__LIVE_DIR__/.local/ffmpeg.out 2>&1
-        offset=0 # 清空首集偏移
-        if (($(grep -i -c "Error" $__LIVE_DIR__/.local/ffmpeg.out) != 0)); then
+        # 若输出中的ERROR小于某个阈值则认为是推流失败（推流断开通常是末尾有一个Error）
+        if (($(grep -i -c "Error" $__LIVE_DIR__/.local/ffmpeg.out) < 10)); then
             echo "$file breaked at: $pos"
             _pos_time $file $((i))
             break
         fi
+        offset=0 # 清空首集偏移
         echo "pushed $pos: ${arr[i]}"
         ((i = (i + 1) % len))
         ((cnt = cnt + 1))
