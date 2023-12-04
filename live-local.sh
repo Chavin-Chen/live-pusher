@@ -64,9 +64,9 @@ _play() {
     local cnt=0
     echo "plan to push $file($2) $n files"
     # 解析音频编码参数
-    local encode="-c copy"
-    if [[ "$*" == *'AAC'* ]]; then
-        encode="-c:a aac -c:v copy"
+    local encode="-c copy -max_muxing_queue_size 1024"
+    if [[ "$*"==*'AAC'* ]]; then
+        encode="-c:a aac -c:v copy -max_muxing_queue_size 1024"
     fi
     # 检查推流地址
     local url
