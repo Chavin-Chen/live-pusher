@@ -92,7 +92,7 @@ _play() {
         # 若输出中的ERROR小于某个阈值则认为是推流失败（推流断开通常是末尾有一个Error）
         code=$?
         errs=$(grep -i -c "Error" $__LIVE_DIR__/.local/ffmpeg.out)
-        if ((errs > 0 && errs < 10)); then
+        if ((code > 0 && code < 128 || errs > 0 && errs < 10)); then
             echo "$file breaked at: $pos (code=$code, err=$errs)"
             _pos_time $file $((i))
             break
