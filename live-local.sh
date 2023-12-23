@@ -99,7 +99,7 @@ _play() {
             if ((retry >= 3)); then
                 break
             else
-                retry++
+                ((retry++))
                 sleep 3
                 continue
             fi
