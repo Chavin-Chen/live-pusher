@@ -84,6 +84,7 @@ _play() {
     fi
     local code
     local errs
+    local retry=0
     # 循环推流，直到分集数
     for ((i = pos; i < len && (cnt < n || n <= 0); )); do
         echo "start pushing $pos: ${arr[i]} offset=$offset"
@@ -95,8 +96,15 @@ _play() {
         if ((code > 0 && code < 128 || errs > 0 && errs < 10)); then
             echo "$file breaked at: $pos (code=$code, err=$errs)"
             _pos_time $file $((i))
-            break
+            if ((retry >= 3)); then
+                break
+            else
+                retry++
+                sleep 3
+                continue
+            fi
         fi
+        retry=0
         offset=0 # 清空首集偏移
         echo "pushed $pos: ${arr[i]}"
         ((i = (i + 1) % len))
