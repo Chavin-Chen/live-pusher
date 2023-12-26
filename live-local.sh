@@ -138,7 +138,6 @@ while getopts 'd:u:m:n:' args; do
         ;;
     *)
         echo "ERROR INPUT!!!"
-        return 1
         ;;
     esac
 done
