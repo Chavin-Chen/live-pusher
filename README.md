@@ -25,7 +25,7 @@ $ . .bashrc
 $ live --version
 
 # upgrade
-cd live-pusher/
+cd ~/live-pusher/
 git fetch --tags
 # dev
 git checkout -b develop origin/develop

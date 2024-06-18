@@ -115,7 +115,7 @@ _play() {
 }
 
 # 加载工具库
-source /live/live-config.sh
+source $HOME/live-pusher/live-config.sh
 # 直播主目录
 __LIVE_DIR__=${__LIVE_DIR__:-"$HOME/live/0"}
 # 推流地址
