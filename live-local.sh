@@ -62,7 +62,7 @@ _play() {
     local n=${3:-"$len"}
     ((n == -1)) && n="$len"
     local cnt=0
-    echo "plan to push $file($2) $n files"
+    echo "plan to push $file($2) $n files $(now)"
     # 解析音频编码参数
     local encode="-c copy -max_muxing_queue_size 1024"
     if [[ "$*"==*'AAC'* ]]; then
@@ -87,14 +87,14 @@ _play() {
     local retry=0
     # 循环推流，直到分集数
     for ((i = pos; i < len && (cnt < n || n <= 0); )); do
-        echo "start pushing $pos: ${arr[i]} offset=$offset"
+        echo "start pushing $pos: ${arr[i]} offset=$offset $(now)"
         ffmpeg -re -ss $offset -i ${arr[i]} $encode -f flv -flvflags no_duration_filesize -hide_banner \
             $url >$__LIVE_DIR__/.local/ffmpeg.out 2>&1
         # 若输出中的ERROR小于某个阈值则认为是推流失败（推流断开通常是末尾有一个Error）
         code=$?
         errs=$(grep -i -c "Error" $__LIVE_DIR__/.local/ffmpeg.out)
         if ((code > 0 && code < 128 || errs > 0 && errs < 10)); then
-            echo "$file breaked at: $pos (code=$code, err=$errs)"
+            echo "$file breaked at: $pos (code=$code, err=$errs) $(now)"
             _pos_time $file $((i))
             if ((retry >= 3)); then
                 break
@@ -106,7 +106,7 @@ _play() {
         fi
         retry=0
         offset=0 # 清空首集偏移
-        echo "pushed $pos: ${arr[i]}"
+        echo "pushed $pos: ${arr[i]} $(now)"
         ((i = (i + 1) % len))
         ((cnt = cnt + 1))
         pos=$((i))
