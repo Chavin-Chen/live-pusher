@@ -82,7 +82,7 @@ live -u 'rtmp://xxx' -m video
 │   ├── behind     # run cmd background
 │   └── now        # dump current time/timestamp
 └── live-local.sh
-    ├── main       # then entry for pushing
+    ├── main       # the entry for pushing
     ├── _play      # body for pushing 
     └── _pos_time  # get history push progress
 ```

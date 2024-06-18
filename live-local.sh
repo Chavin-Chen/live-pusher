@@ -58,7 +58,7 @@ _play() {
         read offset
         offset=${offset:-0}
     } <$__LIVE_DIR__/.local/$file
-    # 解析累计推流集数（默认播完就停播）
+    # 解析累计推流集数（默认播完就停播,同${cnt}=-1,传入0一直循环）
     local n=${3:-"$len"}
     ((n == -1)) && n="$len"
     local cnt=0
