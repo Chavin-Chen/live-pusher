@@ -30,7 +30,7 @@ git fetch --tags
 # main
 git rebase FETCH_HEAD main
 # released version
-git rebase v1.0 v1.0 main
+git rebase v1.0 main
 ```
 
 ## Usage
