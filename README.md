@@ -18,7 +18,7 @@ git clone https://github.com/Chavin-Chen/live-pusher.git
 # grant exec permission
 chomd -R 755 /live-pusher/
 # add script to init script
-echo '[ -s "$HOME/live-pusher/live-config.sh" ] && source /$HOME/live-pusher/live-config.sh' >~/.bashrc
+echo '[ -s "$HOME/live-pusher/live-config.sh" ] && source /$HOME/live-pusher/live-config.sh' >>~/.bashrc
 # reload
 $ . .bashrc
 # show live-pusher version
@@ -27,12 +27,10 @@ $ live --version
 # upgrade
 cd ~/live-pusher/
 git fetch --tags
-# dev
-git checkout -b develop origin/develop
 # main
-git checkout -b main origin/main
+git rebase FETCH_HEAD main
 # released version
-git checkout -b v1.0 v1.0
+git rebase v1.0 v1.0 main
 ```
 
 ## Usage
