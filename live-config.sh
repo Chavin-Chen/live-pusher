@@ -120,7 +120,6 @@ live() {
     [[ -n "$url" ]] && echo "$url" >$dir/.R
     [[ -z "$media" ]] && doc=1
     if ((doc == 1)); then
-    cd $dir
         cat <<-END
 Current version: 1.0
  dir=$dir
@@ -131,15 +130,19 @@ Usage:
     start to push media library named drama to target url
 
 Options:
- -d, --dir <dir-number>             set the log dir, auto prefixed '$HOME/live/'
- -u, --url <rtmp-url>               set the target url to push 
- -m, --media <media-lib>            set the media library configured in live-local.sh
- -n, --num <num-of-videos-to-push>  set the number of videos preparing to push, 0 for loop
- -h, --help                         show help
+ -d, --dir <dir-number>     set the log dir, auto prefixed '$HOME/live/'
+ -u, --url <rtmp-url>       the target url to push 
+ -m, --media <media-lib>    set the media library configured, or 'relay' for relaying
+ -n, --num <num-of-videos>  number of videos to push;0 for loop; or rooms for relaying
+ -h, --help                 show help document
 END
         return 0
     fi
     # 切换到工作目录后，执行任务
     cd $dir
-    behind $HOME/live-pusher/live-local.sh -d $dir -u "'$url'" -m $media -n $num
+    if [[ "$media" == 'relay' ]] && [[ -s "$HOME/live-pusher/live-remote.sh" ]]; then
+        behind $HOME/live-pusher/live-remote.sh -d $dir -u "'$url'" -r $num
+    else 
+        behind $HOME/live-pusher/live-local.sh -d $dir -u "'$url'" -m $media -n $num
+    fi
 }
